@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2020-02-10T12:32:45
+# Project created by QtCreator 2020-05-16T20:37:48
 #
 #-------------------------------------------------
 
@@ -8,8 +8,7 @@ QT       += core gui
 QT       += serialport
 QT       += printsupport
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
-
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = SerialCurve
 TEMPLATE = app
@@ -28,18 +27,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         src/main.cpp \
-        src/baseserialcomm.cpp \
+        src/serialcurve.cpp \
         src/qcustomplot.cpp \
-    src/serialcurve.cpp
+        src/baseserialcomm.cpp
 
 HEADERS += \
-        inc/baseserialcomm.h \
+        inc/serialcurve.h \
         inc/qcustomplot.h \
-    inc/serialcurve.h
+        inc/baseserialcomm.h
 
 FORMS += \
-    ui/serialcurve.ui
-
+        ui/serialcurve.ui
 
 # 资源文件
 RESOURCES += res/images.qrc
@@ -54,16 +52,4 @@ INCLUDEPATH += ./inc
 # 可执行文件.exe 路径
 DESTDIR = ./exe
 
-# 配置输出路径: debug和release模式下的输出路径
-# 配置动态链接库的路径: debug和release模式下的dll路径
-CONFIG(debug, debug|release){
-#DESTDIR = ../../debug                 # .exe 路径
-#LIBS  += -L ../../debug -lSerialComm # .dll 路径
-}else {
-#DESTDIR = ../../release
-#LIBS  += -L ../../release -lSerialComm
-}
 
-# 预编译文件
-#CONFIG += precompile_header
-#PRECOMPILED_HEADER +=   inc/baseserialcomm.h

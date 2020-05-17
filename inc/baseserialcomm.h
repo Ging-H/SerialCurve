@@ -5,14 +5,16 @@
 #include <QSerialPort>
 #include <QSerialPortInfo>
 #include <QAbstractItemView>
+#include <QMessageBox>
+#include <QMetaEnum>
+#include <QDebug>
+//#include "crc.h"
 
-//#define USE_CRC_MODULE // 使用 CRC校验模块才会使用这个宏
 class BaseSerialComm : public QSerialPort,public QSerialPortInfo
 {
     Q_OBJECT
 public:
     // QSerialPort 只有115200波特率, 为避免直接修改库文件,重写波特率枚举类型
-    //
     enum BaudRate {
         Baud1200    = 1200,
         Baud2400    = 2400,
@@ -24,6 +26,7 @@ public:
         Baud115200  = 115200,
         Baud128000  = 128000,
         Baud256000  = 256000,
+        Baud921600  = 921600,
         Baud1000000 = 1000000,
         UnknownBaud = -1
     };
@@ -38,19 +41,6 @@ public:
     };
     Q_ENUM(Terminator)
 
-    enum VerifyStyle{
-        AddVerifyItem      = 0,
-        ADD8               = 1,
-        NADD8              = 2,
-        XOR8               = 3,
-        CRC_Modbus         = 4,
-        CRC_Xmodem         = 5,
-        CRC32              = 6,
-        LRC                = 7, // Longitudinal Redundancy Check
-        UnknownStyle       = -1
-    };
-    Q_ENUM(VerifyStyle)
-
     explicit BaseSerialComm(QSerialPort *parent = nullptr);
 
     static void listVerify      (QComboBox *cbbVerify);
@@ -59,34 +49,28 @@ public:
     static void listDataBit     (QComboBox *cbbDataBit);
     static void listPortNum     (QComboBox *cbbPortNum);
     static void listTerminator  (QComboBox *cbbTerminator);
-    static void listVerifyStyle (QComboBox *cbbVerifyStyle);
     static void searchPort      (QStringList &portList);
-    static quint8 verifyADD8    (QByteArray  buf );
-    static quint8 verifyXOR8    (QByteArray  buf );
-    static QByteArray verifyCRC16   (QByteArray  buf);
-    static QByteArray verifyCRC16_CCITT(QByteArray buf);
-    static QByteArray verifyCRC32(QByteArray buf);
-    static QByteArray verifyLRC( QByteArray buf );
+
+    quint8   verifyADD8(QByteArray  buf );
+    quint8   verifyXOR8(QByteArray  buf );
+    quint16  verifyCRC16_Modbus(QByteArray buf);
+    quint16  verifyCRC16_CCITT(QByteArray buf);
+    quint32  verifyCRC32(QByteArray buf);
+    quint16  verifyLRC( QByteArray buf );
+    uint8_t  verifyCRC8_DS18B20(QByteArray buf);
+    uint16_t verifyCRC16_USB(QByteArray buf);
+    uint16_t verifyCRC16_CCITT_FALSE(QByteArray buf);
+
     static bool isHexString(QString src);
 
-
-//    static void verifyCon?stant  (QByteArray &buf,  qint32 size);
-    QByteArray insertVerify(QByteArray &buf, int start, int end, int VerifyStyle);
     qint32 readData   (QByteArray &rxBuffer);
     qint32 writtenData(QString txBuffer);
-    void setDTRState(bool set);
-    void setRTSState(bool set);
     void insertTerminator(QByteArray &buffer,BaseSerialComm::Terminator terminator);
-
-
 
 signals:
 
 public slots:
 
-
-
 };
 
 #endif // BASESERIALCOMM_H
-

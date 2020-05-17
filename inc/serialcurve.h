@@ -1,11 +1,13 @@
-#ifndef SIMPLEOSCILLOSCOPE_H
-#define SIMPLEOSCILLOSCOPE_H
+#ifndef SERIALCURVE_H
+#define SERIALCURVE_H
 
 #include <QMainWindow>
 #include "baseserialcomm.h"
-#include "qcustomplot.h"
 #include "QMessageBox"
 #include "QButtonGroup"
+#include "qcustomplot.h"
+
+
 
 namespace Ui {
 class SerialCurve;
@@ -101,6 +103,8 @@ private slots:
 
     void on_actionHelpFile_triggered();
 
+    void on_actionLBG_triggered();
+
 private:
     Ui::SerialCurve *ui;
     BaseSerialComm *currentPort;   // 端口号
@@ -111,4 +115,4 @@ private:
     QList<QCPItemText *>   lblGraph; // 显示曲线值
 };
 
-#endif // MAINWINDOW_H
+#endif // SERIALCURVE_H

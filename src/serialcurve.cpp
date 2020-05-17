@@ -1,7 +1,6 @@
 #include "serialcurve.h"
 #include "ui_serialcurve.h"
-#include "QtEndian"
-#include <QTextCodec>
+#include "qcustomplot.h"
 
 SerialCurve::SerialCurve(QWidget *parent) :
     QMainWindow(parent),
@@ -17,6 +16,18 @@ SerialCurve::SerialCurve(QWidget *parent) :
     rdbGroup ->setExclusive(true);
     rdbGroup ->addButton(ui->rdbSinglePlot);
     rdbGroup ->addButton(ui->rdbMultiPlot);
+
+    /* ui初始化 */
+    QApplication::setStyle(QStyleFactory::create("fusion"));// fusion 风格
+    QFile file(":/theme/blackOrange.css");              // QSS文件
+    if (!file.open(QFile::ReadOnly)){  // 打开文件
+        return;
+    }
+    QTextStream in(&file);
+    in.setCodec("UTF-8");
+    QString qss = in.readAll();        // 读取数据
+    qApp->setStyleSheet(qss);          // 应用
+    this->setWindowTitle("硬石电子-串口数据图像化工具 v1.0");
 }
 
 SerialCurve::~SerialCurve()
@@ -24,8 +35,9 @@ SerialCurve::~SerialCurve()
     delete ui;
 }
 
-
-/*   初始化了串口设置当中的下拉列表(ComboBox) */
+/**
+ * @brief SerialCurve::initComboBox_Config 初始化了串口设置当中的下拉列表(ComboBox)
+ */
 void SerialCurve::initComboBox_Config()
 {
     /* 更新下拉列表 */
@@ -36,7 +48,9 @@ void SerialCurve::initComboBox_Config()
     BaseSerialComm::listPortNum ( ui -> cbbPortNum );
 }
 
-/* 刷新按钮点击 槽函数 */
+/**
+ * @brief SerialCurve::on_btnRefresh_clicked 点击刷新按钮
+ */
 void SerialCurve::on_btnRefresh_clicked()
 {
     if( !ui->btnOpenPort->isChecked()){  // 关闭串口才能刷新端口号
@@ -45,7 +59,10 @@ void SerialCurve::on_btnRefresh_clicked()
     }
 }
 
-/* 打开串口 槽函数*/
+/**
+ * @brief SerialCurve::on_btnOpenPort_clicked 打开串口
+ * @param checked
+ */
 void SerialCurve::on_btnOpenPort_clicked(bool checked)
 {
     QString tmp = ui->cbbPortNum->currentText();
@@ -54,8 +71,8 @@ void SerialCurve::on_btnOpenPort_clicked(bool checked)
         // 当前串口处于关闭状态
         currentPort->setPortName( tmp );              // 设置端口号
         if( currentPort->open(QIODevice::ReadWrite)){ // 打开串口
-            currentPort -> setDTRState(false);
-            currentPort -> setRTSState(false);
+            currentPort->setRequestToSend(false);
+            currentPort->setDataTerminalReady(false);
             /* 配置端口的波特率等参数 */
             this->configPort();
 
@@ -82,7 +99,9 @@ void SerialCurve::on_btnOpenPort_clicked(bool checked)
     }
 }
 
-/* 配置端口的波特率\数据位\奇偶校验\停止位 */
+/**
+ * @brief SerialCurve::configPort 配置端口的波特率\数据位\奇偶校验\停止位
+ */
 void SerialCurve::configPort()
 {
     QVariant tmpVariant;
@@ -107,7 +126,10 @@ void SerialCurve::configPort()
     }
 }
 
-/* 串口错误信息处理 */
+/**
+ * @brief SerialCurve::slots_errorHandler 串口错误信息处理
+ * @param error
+ */
 void SerialCurve::slots_errorHandler(QSerialPort::SerialPortError error)
 {
     switch(error){
@@ -121,8 +143,9 @@ void SerialCurve::slots_errorHandler(QSerialPort::SerialPortError error)
     }
 }
 
-/*  */
-/* 初始化自定义绘图曲线 */
+/**
+ * @brief SerialCurve::initPlot 初始化自定义绘图曲线
+ */
 void SerialCurve::initPlot()
 {
     // set some pens, brushes and backgrounds:
@@ -171,8 +194,9 @@ void SerialCurve::initPlot()
     ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
 }
 
-/* 功能实现 */
-/* 添加一条曲线 */
+/**
+ * @brief SerialCurve::configSinglePlot 添加一条曲线
+ */
 void SerialCurve::configSinglePlot()
 {
     /* 清空原有曲线 */
@@ -192,7 +216,9 @@ void SerialCurve::configSinglePlot()
         emit ui->actionCoorTips->triggered(true);
     }
 }
-/* 添加多条曲线 */
+/**
+ * @brief SerialCurve::configMultiPlot 添加多条曲线
+ */
 void SerialCurve::configMultiPlot()
 {
     /* 清空原有曲线 */
@@ -219,7 +245,9 @@ void SerialCurve::configMultiPlot()
     ui->statusBar->showMessage(tr("添加%1条曲线").arg(numGraphs));
 }
 
-/* 添加新的曲线 */
+/**
+ * @brief SerialCurve::addNewGraph 添加新的曲线
+ */
 void SerialCurve::addNewGraph()
 {
     // add new graphs and set their look:
@@ -242,7 +270,10 @@ void SerialCurve::addNewGraph()
     ui->btnCurveSel->addItem(ui->customPlot->graph(currentNum)->name());
 }
 
-/* 槽函数 选择任意曲线设置颜色和名字 */
+/**
+ * @brief SerialCurve::on_btnCurveSel_currentIndexChanged 选择任意曲线设置颜色和名字
+ * @param index
+ */
 void SerialCurve::on_btnCurveSel_currentIndexChanged(int index)
 {
     if(ui->btnCurveSel->currentText().isEmpty())
@@ -255,7 +286,10 @@ void SerialCurve::on_btnCurveSel_currentIndexChanged(int index)
     ui->btnColorSel->setStyleSheet(tr("background-color: %1").arg(curveColor.name()));
 }
 
-/* 槽函数,选择单条曲线 */
+/**
+ * @brief SerialCurve::on_rdbSinglePlot_clicked 选择单条曲线
+ * @param checked
+ */
 void SerialCurve::on_rdbSinglePlot_clicked(bool checked)
 {
     if(checked){
@@ -283,7 +317,11 @@ void SerialCurve::on_rdbSinglePlot_clicked(bool checked)
         timer.start(20); // 启动定时器 20ms
     }
 }
-/* 槽函数,选择多条曲线 */
+
+/**
+ * @brief SerialCurve::on_rdbMultiPlot_clicked 选择多条曲线
+ * @param checked
+ */
 void SerialCurve::on_rdbMultiPlot_clicked(bool checked)
 {
     if(checked){
@@ -295,15 +333,22 @@ void SerialCurve::on_rdbMultiPlot_clicked(bool checked)
         ui->spbNumberG->setEnabled(true);
         this->configMultiPlot(); // 添加曲线
         this->dataBuf.clear();
+        timer.start(20); // 启动定时器 20ms
     }
 }
-/* 修改曲线数量 */
+
+/**
+ * @brief SerialCurve::on_spbNumberG_editingFinished 修改曲线数量
+ */
 void SerialCurve::on_spbNumberG_editingFinished()
 {
     emit ui->rdbMultiPlot->clicked(true); // 触发"多条曲线"点击事件,修改曲线数量
 }
 
-/* 更换曲线数据类型 */
+/**
+ * @brief SerialCurve::on_cbbDataType_currentIndexChanged 更换曲线数据类型
+ * @param index
+ */
 void SerialCurve::on_cbbDataType_currentIndexChanged(int index)
 {
     this->dataType = (DataType)index;
@@ -312,7 +357,9 @@ void SerialCurve::on_cbbDataType_currentIndexChanged(int index)
     }
 }
 /* 单一曲线显示处理,定时器超时槽函数 */
-/* 单字节处理 */
+/**
+ * @brief SerialCurve::slots_singlePlotByte 单字节处理
+ */
 void SerialCurve::slots_singlePlotByte()
 {
     if(dataBuf.isEmpty()) return; // 数据缓存为空
@@ -340,7 +387,10 @@ void SerialCurve::slots_singlePlotByte()
     ui->customPlot->replot(QCustomPlot::rpQueuedReplot);
     dataBuf.clear();
 }
-/* 超时更新曲线,半字数据曲线 */
+
+/**
+ * @brief SerialCurve::slots_singlePlotHMByte 超时更新曲线,半字数据曲线
+ */
 void SerialCurve::slots_singlePlotHMByte()
 {
     if(dataBuf.isEmpty()) return; // 数据缓存为空
@@ -390,7 +440,10 @@ void SerialCurve::slots_singlePlotHMByte()
         dataBuf.append(tmpArray);
     }
 }
-/* 超时更新曲线,多字节数据曲线 */
+
+/**
+ * @brief SerialCurve::slots_singlePlotMByte 超时更新曲线,多字节数据曲线
+ */
 void SerialCurve::slots_singlePlotMByte()
 {
     if(dataBuf.isEmpty()) return;// 数据缓存为空
@@ -447,7 +500,9 @@ void SerialCurve::slots_singlePlotMByte()
     dataBuf.clear();
 }
 
-/* 超时更新曲线,多条曲线显示处理 */
+/**
+ * @brief SerialCurve::slots_multiPlotCurve 超时更新曲线,多条曲线显示处理
+ */
 void SerialCurve::slots_multiPlotCurve()
 {
     if(dataBuf.isEmpty()) return;// 数据缓存为空
@@ -458,19 +513,19 @@ void SerialCurve::slots_multiPlotCurve()
     /* 验证最后的数据为';',表示至少接收到一帧完整的数据 */
     if(dataBuf.endsWith(';')){ // 接收到完整的数据
         QRegExp reg("(\\d+=-?\\d+\\.?\\d*;)", Qt::CaseInsensitive);
-        qint32 count = 0;
         qint32 pos = 0;
         // 遍历所有匹配的字符串
         while ((pos = reg.indexIn(dataBuf, pos)) != -1) {
-            ++count;
+
             pos += reg.matchedLength();
-            if(count>graphsCount) // 曲线数量与数据不匹配
-                break;
 
             /* 解析字符串,以'='划分两部分 */
             QStringList valueData = reg.capturedTexts().at(0).split('='); // 划分为两部分有效数据
             qint32 graphNum = valueData.at(0).toInt();  // 第一部分是曲线编号
             QString strData = valueData.at(1);          // 第二部分是曲线数据
+            if( graphNum >= graphsCount ){
+                continue;
+            }
 
             strData.remove(';');  // 移除';'号
             float curveData = strData.toFloat();
@@ -482,20 +537,29 @@ void SerialCurve::slots_multiPlotCurve()
         dataBuf.clear();
     }
 }
-/* 串口接收数据,存储在dataBuf当中 */
+
+/**
+ * @brief SerialCurve::slots_getRxBuf 串口接收数据,存储在dataBuf当中
+ */
 void SerialCurve::slots_getRxBuf()
 {
     QByteArray tmp = currentPort->readAll();
     dataBuf.append(tmp);
 }
 
-/* 多条曲线接收处理 */
+/**
+ * @brief SerialCurve::slots_MultiPlotRxCallback 多条曲线接收处理
+ */
 void SerialCurve::slots_MultiPlotRxCallback()
 {
     ui->statusBar->showMessage(tr("multi Rx"));
 }
 
-/* 重绘坐标轴的范围 */
+/**
+ * @brief SerialCurve::resetAxisRange 重绘坐标轴的范围
+ * @param xAxis
+ * @param yAxis
+ */
 void SerialCurve::resetAxisRange(double xAxis, double yAxis)
 {
     ui->customPlot->xAxis->setRange(xAxis+200, 1000, Qt::AlignRight);
@@ -510,7 +574,11 @@ void SerialCurve::resetAxisRange(double xAxis, double yAxis)
     }
     ui->customPlot->yAxis->setRange(yRange);
 }
-/* 暂停和继续绘图, 实际是停止定时器 */
+
+/**
+ * @brief SerialCurve::on_actionPaused_triggered 暂停和继续绘图, 实际是停止定时器
+ * @param checked
+ */
 void SerialCurve::on_actionPaused_triggered(bool checked)
 {
     if(checked){
@@ -523,7 +591,10 @@ void SerialCurve::on_actionPaused_triggered(bool checked)
         }
     }
 }
-/* 清空曲线 */
+
+/**
+ * @brief SerialCurve::on_actionClear_triggered 清空曲线
+ */
 void SerialCurve::on_actionClear_triggered()
 {
     qint32 graphCounts = ui->customPlot->graphCount();
@@ -536,7 +607,11 @@ void SerialCurve::on_actionClear_triggered()
     ui->customPlot->yAxis->setRange(0, 10, Qt::AlignCenter);
     ui->customPlot->replot(QCustomPlot::rpQueuedReplot);
 }
-/* 选择放大 */
+
+/**
+ * @brief SerialCurve::on_actionSelect_triggered 选择放大
+ * @param checked
+ */
 void SerialCurve::on_actionSelect_triggered(bool checked)
 {
     if(checked){
@@ -546,7 +621,9 @@ void SerialCurve::on_actionSelect_triggered(bool checked)
     }
 }
 
-/* 保存图像 */
+/**
+ * @brief SerialCurve::on_actionSaveImages_triggered 保存图像
+ */
 void SerialCurve::on_actionSaveImages_triggered()
 {
     QFileDialog *fileDialog = this->initSaveFileDialog();
@@ -601,7 +678,10 @@ void SerialCurve::on_actionSaveImages_triggered()
     delete fileDialog;
 }
 
-/* 初始化配置保存文件对话框 */
+/**
+ * @brief SerialCurve::initSaveFileDialog 初始化配置保存文件对话框
+ * @return
+ */
 QFileDialog * SerialCurve::initSaveFileDialog()
 {
     QFileDialog *fileDialog = new QFileDialog();
@@ -655,6 +735,11 @@ QFileDialog * SerialCurve::initSaveFileDialog()
     fileDialog->setDirectory(qApp->applicationDirPath());// 默认路径
     return fileDialog;
 }
+
+/**
+ * @brief SerialCurve::on_actionCoorTips_triggered 坐标显示
+ * @param checked
+ */
 void SerialCurve::on_actionCoorTips_triggered(bool checked)
 {
     if(graphsCount == 0) return;
@@ -711,6 +796,10 @@ void SerialCurve::on_actionCoorTips_triggered(bool checked)
         ui->customPlot->replot(QCustomPlot::rpQueuedReplot);
     }
 }
+/**
+ * @brief SerialCurve::slots_mouseMove 鼠标移动事件
+ * @param event
+ */
 void SerialCurve::slots_mouseMove(QMouseEvent* event)
 {
  //获取鼠标坐标点
@@ -739,9 +828,11 @@ void SerialCurve::slots_mouseMove(QMouseEvent* event)
         i++;
     }
     ui->customPlot->replot(QCustomPlot::rpQueuedReplot);
-//    ui->statusBar->showMessage(tr("(%1 ||  %2  %3  )").arg(x_pos).arg(x_val).arg(posAtGraph));
 }
-/* 修改曲线颜色 */
+
+/**
+ * @brief SerialCurve::on_btnColorSel_clicked 修改曲线颜色
+ */
 void SerialCurve::on_btnColorSel_clicked()
 {
     qint32 index = ui->btnCurveSel->currentIndex();
@@ -761,7 +852,10 @@ void SerialCurve::on_btnColorSel_clicked()
         }
     }
 }
-/* 修改曲线名字 */
+
+/**
+ * @brief SerialCurve::on_txtCurveRename_editingFinished 修改曲线名字
+ */
 void SerialCurve::on_txtCurveRename_editingFinished()
 {
     if(ui->customPlot->graphCount() == 0) return ;
@@ -771,7 +865,10 @@ void SerialCurve::on_txtCurveRename_editingFinished()
     ui->customPlot->replot(QCustomPlot::rpQueuedReplot);
 }
 
-/* 显示使用说明文件 */
+
+/**
+ * @brief SerialCurve::on_actionHelpFile_triggered 显示使用说明文件
+ */
 void SerialCurve::on_actionHelpFile_triggered()
 {
     QString path = QDir::currentPath();
@@ -779,3 +876,84 @@ void SerialCurve::on_actionHelpFile_triggered()
     QDesktopServices::openUrl(QUrl::fromLocalFile(path));
 }
 
+/**
+ * @brief SerialCurve::on_actionLBG_triggered 切换绘图背景色
+ */
+void SerialCurve::on_actionLBG_triggered()
+{
+    static bool lbg = true;
+    if( lbg ){
+        // 高亮背景
+        // set some pens, brushes and backgrounds:
+        ui->customPlot->xAxis->setBasePen(QPen(Qt::black, 1));
+        ui->customPlot->yAxis->setBasePen(QPen(Qt::black, 1));
+        ui->customPlot->xAxis->setTickPen(QPen(Qt::black, 1));
+        ui->customPlot->yAxis->setTickPen(QPen(Qt::black, 1));
+        ui->customPlot->xAxis->setSubTickPen(QPen(Qt::black, 1));
+        ui->customPlot->yAxis->setSubTickPen(QPen(Qt::black, 1));
+        ui->customPlot->xAxis->setTickLabelColor(Qt::black);
+        ui->customPlot->yAxis->setTickLabelColor(Qt::black);
+        ui->customPlot->xAxis->grid()->setPen(QPen(QColor(115, 115, 115), 1, Qt::DotLine));
+        ui->customPlot->yAxis->grid()->setPen(QPen(QColor(115, 115, 115), 1, Qt::DotLine));
+        ui->customPlot->xAxis->grid()->setSubGridPen(QPen(QColor(175, 175, 175), 1, Qt::DotLine));
+        ui->customPlot->yAxis->grid()->setSubGridPen(QPen(QColor(175, 175, 175), 1, Qt::DotLine));
+        ui->customPlot->xAxis->grid()->setSubGridVisible(true);
+        ui->customPlot->yAxis->grid()->setSubGridVisible(true);
+        ui->customPlot->xAxis->grid()->setZeroLinePen(Qt::NoPen);
+        ui->customPlot->yAxis->grid()->setZeroLinePen(Qt::NoPen);
+        ui->customPlot->xAxis->setUpperEnding(QCPLineEnding::esSpikeArrow);
+        ui->customPlot->yAxis->setUpperEnding(QCPLineEnding::esSpikeArrow);
+        QLinearGradient plotGradient;
+        plotGradient.setStart(0, 0);
+        plotGradient.setFinalStop(0, 350);
+        plotGradient.setColorAt(0, QColor(255, 255, 255));
+        plotGradient.setColorAt(1, QColor(255, 255, 255));
+        ui->customPlot->setBackground(plotGradient);
+        QLinearGradient axisRectGradient;
+        axisRectGradient.setStart(0, 0);
+        axisRectGradient.setFinalStop(0, 350);
+        axisRectGradient.setColorAt(0, QColor(255, 255, 255));
+        axisRectGradient.setColorAt(1, QColor(255, 255, 255));
+        ui->customPlot->axisRect()->setBackground(axisRectGradient);
+        ui->customPlot->legend->setTextColor(QColor(0, 0 , 0, 150)); // legend 字体颜色,白色
+        lbg = false;
+    }else{
+        // 深色背景
+        // set some pens, brushes and backgrounds:
+        ui->customPlot->xAxis->setBasePen(QPen(Qt::white, 1));
+        ui->customPlot->yAxis->setBasePen(QPen(Qt::white, 1));
+        ui->customPlot->xAxis->setTickPen(QPen(Qt::white, 1));
+        ui->customPlot->yAxis->setTickPen(QPen(Qt::white, 1));
+        ui->customPlot->xAxis->setSubTickPen(QPen(Qt::white, 1));
+        ui->customPlot->yAxis->setSubTickPen(QPen(Qt::white, 1));
+        ui->customPlot->xAxis->setTickLabelColor(Qt::white);
+        ui->customPlot->yAxis->setTickLabelColor(Qt::white);
+        ui->customPlot->xAxis->grid()->setPen(QPen(QColor(140, 140, 140), 1, Qt::DotLine));
+        ui->customPlot->yAxis->grid()->setPen(QPen(QColor(140, 140, 140), 1, Qt::DotLine));
+        ui->customPlot->xAxis->grid()->setSubGridPen(QPen(QColor(80, 80, 80), 1, Qt::DotLine));
+        ui->customPlot->yAxis->grid()->setSubGridPen(QPen(QColor(80, 80, 80), 1, Qt::DotLine));
+        ui->customPlot->xAxis->grid()->setSubGridVisible(true);
+        ui->customPlot->yAxis->grid()->setSubGridVisible(true);
+        ui->customPlot->xAxis->grid()->setZeroLinePen(Qt::NoPen);
+        ui->customPlot->yAxis->grid()->setZeroLinePen(Qt::NoPen);
+        ui->customPlot->xAxis->setUpperEnding(QCPLineEnding::esSpikeArrow);
+        ui->customPlot->yAxis->setUpperEnding(QCPLineEnding::esSpikeArrow);
+        QLinearGradient plotGradient;
+        plotGradient.setStart(0, 0);
+        plotGradient.setFinalStop(0, 350);
+        plotGradient.setColorAt(0, QColor(80, 80, 80));
+        plotGradient.setColorAt(1, QColor(50, 50, 50));
+        ui->customPlot->setBackground(plotGradient);
+        QLinearGradient axisRectGradient;
+        axisRectGradient.setStart(0, 0);
+        axisRectGradient.setFinalStop(0, 350);
+        axisRectGradient.setColorAt(0, QColor(80, 80, 80));
+        axisRectGradient.setColorAt(1, QColor(30, 30, 30));
+        ui->customPlot->axisRect()->setBackground(axisRectGradient);
+        ui->customPlot->legend->setTextColor(QColor(255, 255, 255, 150)); // legend 字体颜色,白色
+
+
+        lbg  = true;
+    }
+    ui->customPlot->replot(QCustomPlot::rpQueuedReplot);
+}

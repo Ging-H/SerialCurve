@@ -41,14 +41,14 @@ public:
     QAction *actionCharts;
     QAction *actionClear;
     QAction *actionPaused;
-    QAction *actionSelect;
-    QAction *actionCoorTips;
     QAction *actionHelpFile;
+    QAction *actionCoorTips;
+    QAction *actionSelect;
+    QAction *actionLBG;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QGroupBox *QGBSerialConfig;
-    QPushButton *btnOpenPort;
-    QWidget *formLayoutWidget;
+    QGridLayout *gridLayout_3;
     QGridLayout *commParam;
     QLabel *lblVerify;
     QComboBox *cbbDataBit;
@@ -61,19 +61,20 @@ public:
     QComboBox *cbbBaud;
     QLabel *lblDataBit;
     QPushButton *btnRefresh;
+    QPushButton *btnOpenPort;
     QCustomPlot *customPlot;
     QGroupBox *groupBox;
     QGridLayout *gridLayout_2;
-    QHBoxLayout *horizontalLayout_2;
-    QRadioButton *rdbSinglePlot;
-    QComboBox *cbbDataType;
     QHBoxLayout *horizontalLayout;
     QRadioButton *rdbMultiPlot;
     QSpinBox *spbNumberG;
+    QHBoxLayout *horizontalLayout_2;
+    QRadioButton *rdbSinglePlot;
+    QComboBox *cbbDataType;
+    QLineEdit *txtCurveRename;
     QHBoxLayout *horizontalLayout_4;
     QComboBox *btnCurveSel;
     QToolButton *btnColorSel;
-    QLineEdit *txtCurveRename;
     QSpacerItem *verticalSpacer;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
@@ -83,54 +84,56 @@ public:
     {
         if (SerialCurve->objectName().isEmpty())
             SerialCurve->setObjectName(QStringLiteral("SerialCurve"));
-        SerialCurve->resize(804, 509);
-        QIcon icon;
-        icon.addFile(QStringLiteral(":/general/general/graphsPolyline.png"), QSize(), QIcon::Normal, QIcon::Off);
-        SerialCurve->setWindowIcon(icon);
+        SerialCurve->resize(701, 473);
         actionSaveImages = new QAction(SerialCurve);
         actionSaveImages->setObjectName(QStringLiteral("actionSaveImages"));
-        QIcon icon1;
-        icon1.addFile(QStringLiteral(":/general/general/save.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionSaveImages->setIcon(icon1);
+        QIcon icon;
+        icon.addFile(QStringLiteral(":/general/general/save.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionSaveImages->setIcon(icon);
         actionCharts = new QAction(SerialCurve);
         actionCharts->setObjectName(QStringLiteral("actionCharts"));
         actionCharts->setCheckable(true);
-        QIcon icon2;
-        icon2.addFile(QStringLiteral(":/general/general/graphsPolyline.png"), QSize(), QIcon::Normal, QIcon::Off);
-        icon2.addFile(QStringLiteral(":/general/general/graphsHistogram.png"), QSize(), QIcon::Normal, QIcon::On);
-        actionCharts->setIcon(icon2);
+        QIcon icon1;
+        icon1.addFile(QStringLiteral(":/general/general/graphsPolyline.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon1.addFile(QStringLiteral(":/general/general/graphsHistogram.png"), QSize(), QIcon::Normal, QIcon::On);
+        actionCharts->setIcon(icon1);
         actionCharts->setVisible(true);
         actionCharts->setIconVisibleInMenu(true);
         actionClear = new QAction(SerialCurve);
         actionClear->setObjectName(QStringLiteral("actionClear"));
-        QIcon icon3;
-        icon3.addFile(QStringLiteral(":/general/general/Broom.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionClear->setIcon(icon3);
+        QIcon icon2;
+        icon2.addFile(QStringLiteral(":/general/general/Broom.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionClear->setIcon(icon2);
         actionPaused = new QAction(SerialCurve);
         actionPaused->setObjectName(QStringLiteral("actionPaused"));
         actionPaused->setCheckable(true);
+        QIcon icon3;
+        icon3.addFile(QStringLiteral(":/general/general/pause.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon3.addFile(QStringLiteral(":/general/general/play.png"), QSize(), QIcon::Normal, QIcon::On);
+        actionPaused->setIcon(icon3);
+        actionHelpFile = new QAction(SerialCurve);
+        actionHelpFile->setObjectName(QStringLiteral("actionHelpFile"));
         QIcon icon4;
-        icon4.addFile(QStringLiteral(":/general/general/pause.png"), QSize(), QIcon::Normal, QIcon::Off);
-        icon4.addFile(QStringLiteral(":/general/general/play.png"), QSize(), QIcon::Normal, QIcon::On);
-        actionPaused->setIcon(icon4);
-        actionSelect = new QAction(SerialCurve);
-        actionSelect->setObjectName(QStringLiteral("actionSelect"));
-        actionSelect->setCheckable(true);
-        QIcon icon5;
-        icon5.addFile(QStringLiteral(":/general/general/selection.png"), QSize(), QIcon::Normal, QIcon::Off);
-        icon5.addFile(QStringLiteral(":/general/general/pointer_1.png"), QSize(), QIcon::Normal, QIcon::On);
-        actionSelect->setIcon(icon5);
+        icon4.addFile(QStringLiteral(":/general/general/help.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionHelpFile->setIcon(icon4);
         actionCoorTips = new QAction(SerialCurve);
         actionCoorTips->setObjectName(QStringLiteral("actionCoorTips"));
         actionCoorTips->setCheckable(true);
+        QIcon icon5;
+        icon5.addFile(QStringLiteral(":/general/general/tips.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionCoorTips->setIcon(icon5);
+        actionSelect = new QAction(SerialCurve);
+        actionSelect->setObjectName(QStringLiteral("actionSelect"));
+        actionSelect->setCheckable(true);
         QIcon icon6;
-        icon6.addFile(QStringLiteral(":/general/general/tips.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionCoorTips->setIcon(icon6);
-        actionHelpFile = new QAction(SerialCurve);
-        actionHelpFile->setObjectName(QStringLiteral("actionHelpFile"));
+        icon6.addFile(QStringLiteral(":/general/general/selection.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon6.addFile(QStringLiteral(":/general/general/pointer_1.png"), QSize(), QIcon::Normal, QIcon::On);
+        actionSelect->setIcon(icon6);
+        actionLBG = new QAction(SerialCurve);
+        actionLBG->setObjectName(QStringLiteral("actionLBG"));
         QIcon icon7;
-        icon7.addFile(QStringLiteral(":/general/general/help.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionHelpFile->setIcon(icon7);
+        icon7.addFile(QStringLiteral(":/general/general/Style.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionLBG->setIcon(icon7);
         centralWidget = new QWidget(SerialCurve);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -147,61 +150,46 @@ public:
         QGBSerialConfig->setSizePolicy(sizePolicy);
         QGBSerialConfig->setMinimumSize(QSize(171, 211));
         QGBSerialConfig->setMaximumSize(QSize(171, 211));
-        QGBSerialConfig->setStyleSheet(QLatin1String("QGroupBox{\n"
-"border-width:1px;\n"
-"border-style:solid;\n"
-"border-radius:4px;\n"
-"}"));
+        QGBSerialConfig->setStyleSheet(QStringLiteral(""));
         QGBSerialConfig->setFlat(false);
         QGBSerialConfig->setCheckable(false);
-        btnOpenPort = new QPushButton(QGBSerialConfig);
-        btnOpenPort->setObjectName(QStringLiteral("btnOpenPort"));
-        btnOpenPort->setEnabled(true);
-        btnOpenPort->setGeometry(QRect(69, 165, 91, 31));
-        btnOpenPort->setStyleSheet(QStringLiteral(""));
-        QIcon icon8;
-        icon8.addFile(QStringLiteral(":/action/action/centrejust.png"), QSize(), QIcon::Normal, QIcon::Off);
-        icon8.addFile(QStringLiteral(":/action/action/process-stop.png"), QSize(), QIcon::Normal, QIcon::On);
-        btnOpenPort->setIcon(icon8);
-        btnOpenPort->setCheckable(true);
-        btnOpenPort->setChecked(false);
-        btnOpenPort->setAutoDefault(false);
-        btnOpenPort->setFlat(false);
-        formLayoutWidget = new QWidget(QGBSerialConfig);
-        formLayoutWidget->setObjectName(QStringLiteral("formLayoutWidget"));
-        formLayoutWidget->setGeometry(QRect(10, 20, 151, 136));
-        commParam = new QGridLayout(formLayoutWidget);
+        gridLayout_3 = new QGridLayout(QGBSerialConfig);
+        gridLayout_3->setSpacing(2);
+        gridLayout_3->setContentsMargins(11, 11, 11, 11);
+        gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
+        gridLayout_3->setContentsMargins(3, 6, 3, 3);
+        commParam = new QGridLayout();
         commParam->setSpacing(6);
-        commParam->setContentsMargins(11, 11, 11, 11);
         commParam->setObjectName(QStringLiteral("commParam"));
-        commParam->setContentsMargins(0, 0, 0, 0);
-        lblVerify = new QLabel(formLayoutWidget);
+        commParam->setHorizontalSpacing(2);
+        commParam->setVerticalSpacing(6);
+        lblVerify = new QLabel(QGBSerialConfig);
         lblVerify->setObjectName(QStringLiteral("lblVerify"));
 
         commParam->addWidget(lblVerify, 3, 0, 1, 1);
 
-        cbbDataBit = new QComboBox(formLayoutWidget);
+        cbbDataBit = new QComboBox(QGBSerialConfig);
         cbbDataBit->setObjectName(QStringLiteral("cbbDataBit"));
         cbbDataBit->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
         commParam->addWidget(cbbDataBit, 2, 1, 1, 1);
 
-        lblPortNum = new QLabel(formLayoutWidget);
+        lblPortNum = new QLabel(QGBSerialConfig);
         lblPortNum->setObjectName(QStringLiteral("lblPortNum"));
 
         commParam->addWidget(lblPortNum, 0, 0, 1, 1);
 
-        lblStopBit = new QLabel(formLayoutWidget);
+        lblStopBit = new QLabel(QGBSerialConfig);
         lblStopBit->setObjectName(QStringLiteral("lblStopBit"));
 
         commParam->addWidget(lblStopBit, 4, 0, 1, 1);
 
-        lblBaudRate = new QLabel(formLayoutWidget);
+        lblBaudRate = new QLabel(QGBSerialConfig);
         lblBaudRate->setObjectName(QStringLiteral("lblBaudRate"));
 
         commParam->addWidget(lblBaudRate, 1, 0, 1, 1);
 
-        cbbPortNum = new QComboBox(formLayoutWidget);
+        cbbPortNum = new QComboBox(QGBSerialConfig);
         cbbPortNum->setObjectName(QStringLiteral("cbbPortNum"));
         QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Fixed);
         sizePolicy1.setHorizontalStretch(0);
@@ -214,42 +202,79 @@ public:
 
         commParam->addWidget(cbbPortNum, 0, 1, 1, 1);
 
-        cbbVerify = new QComboBox(formLayoutWidget);
+        cbbVerify = new QComboBox(QGBSerialConfig);
         cbbVerify->setObjectName(QStringLiteral("cbbVerify"));
         cbbVerify->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
         commParam->addWidget(cbbVerify, 3, 1, 1, 1);
 
-        cbbStopBit = new QComboBox(formLayoutWidget);
+        cbbStopBit = new QComboBox(QGBSerialConfig);
         cbbStopBit->setObjectName(QStringLiteral("cbbStopBit"));
         cbbStopBit->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
         commParam->addWidget(cbbStopBit, 4, 1, 1, 1);
 
-        cbbBaud = new QComboBox(formLayoutWidget);
+        cbbBaud = new QComboBox(QGBSerialConfig);
         cbbBaud->setObjectName(QStringLiteral("cbbBaud"));
         cbbBaud->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
         commParam->addWidget(cbbBaud, 1, 1, 1, 1);
 
-        lblDataBit = new QLabel(formLayoutWidget);
+        lblDataBit = new QLabel(QGBSerialConfig);
         lblDataBit->setObjectName(QStringLiteral("lblDataBit"));
 
         commParam->addWidget(lblDataBit, 2, 0, 1, 1);
 
+
+        gridLayout_3->addLayout(commParam, 0, 0, 1, 2);
+
         btnRefresh = new QPushButton(QGBSerialConfig);
         btnRefresh->setObjectName(QStringLiteral("btnRefresh"));
-        btnRefresh->setGeometry(QRect(11, 165, 51, 31));
+        QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy2.setHorizontalStretch(1);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(btnRefresh->sizePolicy().hasHeightForWidth());
+        btnRefresh->setSizePolicy(sizePolicy2);
+        btnRefresh->setMinimumSize(QSize(0, 0));
+        btnRefresh->setMaximumSize(QSize(60, 41));
+        QIcon icon8;
+        icon8.addFile(QStringLiteral(":/action/action/reload.png"), QSize(), QIcon::Normal, QIcon::Off);
+        btnRefresh->setIcon(icon8);
+        btnRefresh->setIconSize(QSize(32, 32));
+
+        gridLayout_3->addWidget(btnRefresh, 1, 0, 1, 1);
+
+        btnOpenPort = new QPushButton(QGBSerialConfig);
+        btnOpenPort->setObjectName(QStringLiteral("btnOpenPort"));
+        btnOpenPort->setEnabled(true);
+        QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy3.setHorizontalStretch(3);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(btnOpenPort->sizePolicy().hasHeightForWidth());
+        btnOpenPort->setSizePolicy(sizePolicy3);
+        btnOpenPort->setMaximumSize(QSize(16777215, 41));
+        btnOpenPort->setStyleSheet(QStringLiteral(""));
         QIcon icon9;
-        icon9.addFile(QStringLiteral(":/action/action/reload.png"), QSize(), QIcon::Normal, QIcon::Off);
-        btnRefresh->setIcon(icon9);
+        icon9.addFile(QStringLiteral(":/general/general/com_disconnect.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon9.addFile(QStringLiteral(":/general/general/com_connect_1.png"), QSize(), QIcon::Normal, QIcon::On);
+        btnOpenPort->setIcon(icon9);
+        btnOpenPort->setIconSize(QSize(32, 32));
+        btnOpenPort->setCheckable(true);
+        btnOpenPort->setChecked(false);
+        btnOpenPort->setAutoDefault(false);
+        btnOpenPort->setFlat(false);
+
+        gridLayout_3->addWidget(btnOpenPort, 1, 1, 1, 1);
+
+        gridLayout_3->setColumnMinimumWidth(0, 1);
+        gridLayout_3->setColumnMinimumWidth(1, 3);
 
         gridLayout->addWidget(QGBSerialConfig, 0, 0, 1, 1);
 
         customPlot = new QCustomPlot(centralWidget);
         customPlot->setObjectName(QStringLiteral("customPlot"));
 
-        gridLayout->addWidget(customPlot, 0, 1, 4, 1);
+        gridLayout->addWidget(customPlot, 0, 1, 3, 1);
 
         groupBox = new QGroupBox(centralWidget);
         groupBox->setObjectName(QStringLiteral("groupBox"));
@@ -258,6 +283,26 @@ public:
         gridLayout_2->setSpacing(6);
         gridLayout_2->setContentsMargins(11, 11, 11, 11);
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setSpacing(6);
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        rdbMultiPlot = new QRadioButton(groupBox);
+        rdbMultiPlot->setObjectName(QStringLiteral("rdbMultiPlot"));
+        rdbMultiPlot->setEnabled(true);
+
+        horizontalLayout->addWidget(rdbMultiPlot);
+
+        spbNumberG = new QSpinBox(groupBox);
+        spbNumberG->setObjectName(QStringLiteral("spbNumberG"));
+        spbNumberG->setEnabled(false);
+        spbNumberG->setMinimum(1);
+        spbNumberG->setValue(2);
+
+        horizontalLayout->addWidget(spbNumberG);
+
+
+        gridLayout_2->addLayout(horizontalLayout, 1, 0, 1, 1);
+
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setSpacing(6);
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
@@ -275,24 +320,10 @@ public:
 
         gridLayout_2->addLayout(horizontalLayout_2, 0, 0, 1, 1);
 
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setSpacing(6);
-        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        rdbMultiPlot = new QRadioButton(groupBox);
-        rdbMultiPlot->setObjectName(QStringLiteral("rdbMultiPlot"));
-        rdbMultiPlot->setEnabled(true);
+        txtCurveRename = new QLineEdit(groupBox);
+        txtCurveRename->setObjectName(QStringLiteral("txtCurveRename"));
 
-        horizontalLayout->addWidget(rdbMultiPlot);
-
-        spbNumberG = new QSpinBox(groupBox);
-        spbNumberG->setObjectName(QStringLiteral("spbNumberG"));
-        spbNumberG->setEnabled(false);
-        spbNumberG->setMinimum(2);
-
-        horizontalLayout->addWidget(spbNumberG);
-
-
-        gridLayout_2->addLayout(horizontalLayout, 1, 0, 1, 1);
+        gridLayout_2->addWidget(txtCurveRename, 3, 0, 1, 1);
 
         horizontalLayout_4 = new QHBoxLayout();
         horizontalLayout_4->setSpacing(6);
@@ -310,22 +341,17 @@ public:
 
         gridLayout_2->addLayout(horizontalLayout_4, 2, 0, 1, 1);
 
-        txtCurveRename = new QLineEdit(groupBox);
-        txtCurveRename->setObjectName(QStringLiteral("txtCurveRename"));
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        gridLayout_2->addWidget(txtCurveRename, 3, 0, 1, 1);
+        gridLayout_2->addItem(verticalSpacer, 4, 0, 1, 1);
 
 
         gridLayout->addWidget(groupBox, 1, 0, 1, 1);
 
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        gridLayout->addItem(verticalSpacer, 2, 0, 1, 1);
-
         SerialCurve->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(SerialCurve);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 804, 22));
+        menuBar->setGeometry(QRect(0, 0, 701, 22));
         SerialCurve->setMenuBar(menuBar);
         mainToolBar = new QToolBar(SerialCurve);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -339,6 +365,7 @@ public:
         mainToolBar->addAction(actionPaused);
         mainToolBar->addAction(actionSelect);
         mainToolBar->addAction(actionCoorTips);
+        mainToolBar->addAction(actionLBG);
         mainToolBar->addAction(actionHelpFile);
 
         retranslateUi(SerialCurve);
@@ -351,7 +378,7 @@ public:
 
     void retranslateUi(QMainWindow *SerialCurve)
     {
-        SerialCurve->setWindowTitle(QApplication::translate("SerialCurve", "\344\270\262\345\217\243\346\225\260\346\215\256\345\233\276\350\241\250\345\214\226", Q_NULLPTR));
+        SerialCurve->setWindowTitle(QApplication::translate("SerialCurve", "SerialCurve", Q_NULLPTR));
         actionSaveImages->setText(QApplication::translate("SerialCurve", "\344\277\235\345\255\230", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         actionSaveImages->setToolTip(QApplication::translate("SerialCurve", "\344\277\235\345\255\230\345\233\276\345\203\217", Q_NULLPTR));
@@ -365,14 +392,14 @@ public:
 #ifndef QT_NO_TOOLTIP
         actionPaused->setToolTip(QApplication::translate("SerialCurve", "\346\232\202\345\201\234\347\273\230\345\233\276,\344\275\206\344\273\215\347\273\247\347\273\255\346\216\245\346\224\266\346\225\260\346\215\256", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
+        actionHelpFile->setText(QApplication::translate("SerialCurve", "\344\275\277\347\224\250\350\257\264\346\230\216", Q_NULLPTR));
+        actionCoorTips->setText(QApplication::translate("SerialCurve", "\345\235\220\346\240\207\346\230\276\347\244\272", Q_NULLPTR));
         actionSelect->setText(QApplication::translate("SerialCurve", "\351\200\211\346\213\251\346\224\276\345\244\247", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         actionSelect->setToolTip(QApplication::translate("SerialCurve", "\346\224\276\345\244\247\351\200\211\346\213\251\345\214\272\345\237\237", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        actionCoorTips->setText(QApplication::translate("SerialCurve", "\345\235\220\346\240\207\346\230\276\347\244\272", Q_NULLPTR));
-        actionHelpFile->setText(QApplication::translate("SerialCurve", "\344\275\277\347\224\250\350\257\264\346\230\216", Q_NULLPTR));
+        actionLBG->setText(QApplication::translate("SerialCurve", "\344\272\256\350\211\262\350\203\214\346\231\257", Q_NULLPTR));
         QGBSerialConfig->setTitle(QApplication::translate("SerialCurve", "\344\270\262\345\217\243\350\256\276\347\275\256", Q_NULLPTR));
-        btnOpenPort->setText(QApplication::translate("SerialCurve", "\346\211\223\345\274\200\344\270\262\345\217\243", Q_NULLPTR));
         lblVerify->setText(QApplication::translate("SerialCurve", "\346\240\241\351\252\214", Q_NULLPTR));
         lblPortNum->setText(QApplication::translate("SerialCurve", "\347\253\257\345\217\243\345\217\267", Q_NULLPTR));
         lblStopBit->setText(QApplication::translate("SerialCurve", "\345\201\234\346\255\242\344\275\215", Q_NULLPTR));
@@ -382,7 +409,9 @@ public:
         btnRefresh->setToolTip(QApplication::translate("SerialCurve", "\345\210\267\346\226\260\347\253\257\345\217\243\345\217\267", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         btnRefresh->setText(QApplication::translate("SerialCurve", "\345\210\267\346\226\260", Q_NULLPTR));
+        btnOpenPort->setText(QApplication::translate("SerialCurve", "\346\211\223\345\274\200\344\270\262\345\217\243", Q_NULLPTR));
         groupBox->setTitle(QApplication::translate("SerialCurve", "\346\233\262\347\272\277\350\256\276\347\275\256", Q_NULLPTR));
+        rdbMultiPlot->setText(QApplication::translate("SerialCurve", "\345\244\232\346\235\241\346\233\262\347\272\277", Q_NULLPTR));
         rdbSinglePlot->setText(QApplication::translate("SerialCurve", "\345\215\225\344\270\200\346\233\262\347\272\277", Q_NULLPTR));
         cbbDataType->clear();
         cbbDataType->insertItems(0, QStringList()
@@ -397,13 +426,15 @@ public:
 #ifndef QT_NO_TOOLTIP
         cbbDataType->setToolTip(QApplication::translate("SerialCurve", "\345\215\225\344\270\252\346\225\260\346\215\256\347\202\271\347\232\204\346\225\260\346\215\256\347\261\273\345\236\213", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        rdbMultiPlot->setText(QApplication::translate("SerialCurve", "\345\244\232\346\235\241\346\233\262\347\272\277", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        txtCurveRename->setToolTip(QApplication::translate("SerialCurve", "\346\233\262\347\272\277\345\220\215\345\255\227", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
 #ifndef QT_NO_TOOLTIP
         btnColorSel->setToolTip(QApplication::translate("SerialCurve", "\350\256\276\347\275\256\351\242\234\350\211\262", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         btnColorSel->setText(QString());
 #ifndef QT_NO_TOOLTIP
-        txtCurveRename->setToolTip(QApplication::translate("SerialCurve", "\346\233\262\347\272\277\345\220\215\345\255\227", Q_NULLPTR));
+        mainToolBar->setToolTip(QApplication::translate("SerialCurve", "\344\272\256\350\211\262\350\203\214\346\231\257", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
     } // retranslateUi
 
