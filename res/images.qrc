@@ -1,0 +1,28 @@
+<RCC>
+    <qresource prefix="/action">
+        <file>action/fileopen.png</file>
+        <file>action/filesave.png</file>
+        <file>action/process-stop.png</file>
+        <file>action/reload.png</file>
+    </qresource>
+    <qresource prefix="/general">
+        <file>general/ing10.ico</file>
+        <file>general/arrow_down_1.png</file>
+        <file>general/save.png</file>
+        <file>general/graphsHistogram.png</file>
+        <file>general/graphsPolyline.png</file>
+        <file>general/Broom.png</file>
+        <file>general/pause.png</file>
+        <file>general/play.png</file>
+        <file>general/pointer_1.png</file>
+        <file>general/selection.png</file>
+        <file>general/tips.png</file>
+        <file>general/help.png</file>
+        <file>general/Style.png</file>
+        <file>general/com_connect_1.png</file>
+        <file>general/com_disconnect.png</file>
+    </qresource>
+    <qresource prefix="/theme">
+        <file>blackOrange.css</file>
+    </qresource>
+</RCC>
